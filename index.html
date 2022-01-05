@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv='cache-control' content='no-cache'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'> 
+    <title>EB metering</title>
+</head>
+<body>
+    <style>
+        body {
+            background-color: floralwhite;
+            margin: 0px;
+            font-size: 5vmin;
+        }
+        .cen{
+            height: 100vh;
+            display: -ms-grid;
+            display: grid;
+            place-items: center;
+        }
+        table,th,td {
+            /* border : 1px solid black; */
+            border-collapse: collapse;
+        }
+        th,td {
+            padding: 5px;
+        }
+        button {
+            background: rgb(180, 0, 0);
+            color: floralwhite;
+            padding: 10px;
+            border-radius: 10px;
+            border-top: hidden;
+            border-left: hidden;
+            border-bottom-color: maroon;
+            border-right-color: maroon;
+        }
+    </style>
+    <div class="cen">
+        <table class="reading" id="demo"></table>
+        <button id="connection" onclick=connection()>Disconnect</button>
+        <button type="button" onclick="loadDoc()">Refresh</button>
+    </div>
+    <script>
+        var state = 'off';
+        function connection() {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+            console.log(this.response);
+            if(this.response == 'off'){
+                document.getElementById("connection").innerHTML = "Connect";
+                state = 'on'
+            }else if(this.response == 'on'){
+                document.getElementById("connection").innerHTML = "Disconnect";
+                state = 'off'
+            }
+        }
+        // xhttp.open("GET", "reading?_=" + new Date().getTime());
+        xhttp.open("GET", state);
+        xhttp.send();
+        }
+        function loadDoc() {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+            myFunction(this);
+        }
+        // xhttp.open("GET", "reading?_=" + new Date().getTime());
+        xhttp.open("GET", "reading");
+        xhttp.send();
+        }
+        function myFunction(xml) {
+        const xmlDoc = xml.responseXML;
+        const x = xmlDoc.getElementsByTagName("READING");
+        let table="<tr><th>OLD READING :</th><td>" + x[0].getElementsByTagName("OLD")[0].childNodes[0].nodeValue + "</td></tr>" +
+        "<tr><th>NEW READING :</th><td>" + x[0].getElementsByTagName("NEW")[0].childNodes[0].nodeValue + "</td></tr>" +
+        "<tr><th>CONSUMPTION :</th><td>" + x[0].getElementsByTagName("CONSUMPTION")[0].childNodes[0].nodeValue + "</td></tr>";
+        document.getElementById("demo").innerHTML = table;
+        var tampering = x[0].getElementsByTagName("TAMPERING")[0].childNodes[0].nodeValue;
+        var complaint = x[0].getElementsByTagName("COMPLAINT")[0].childNodes[0].nodeValue;
+        if(tampering != " ") {
+            alert("Connection tampered");
+        }
+        if(complaint != " ") {
+            alert(complaint);
+        }
+
+        }
+        loadDoc();
+        //setInterval(loadDoc, 1000);
+    </script>
+</body>
+</html>
