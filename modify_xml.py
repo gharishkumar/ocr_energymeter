@@ -10,8 +10,4 @@ for old_value in myroot.iter('OLD'):
 		for consumption in myroot.iter('CONSUMPTION'):
 			consumption.text = str(round(reading - float(new_value.text), 1))
 		new_value.text = str(reading)
-	
-
-
-
 mytree.write('log.xml')

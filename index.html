@@ -64,33 +64,33 @@
         xhttp.send();
         }
         function loadDoc() {
-        const xhttp = new XMLHttpRequest();
-        xhttp.onload = function() {
-            myFunction(this);
-        }
-        // xhttp.open("GET", "reading?_=" + new Date().getTime());
-        xhttp.open("GET", "reading");
-        xhttp.send();
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function() {
+                myFunction(this);
+            }
+            // xhttp.open("GET", "reading?_=" + new Date().getTime());
+            xhttp.open("GET", "reading");
+            xhttp.send();
+            const xhttp_1 = new XMLHttpRequest();
+            xhttp_1.onload = function() {
+                if(this.response != ' '){
+                    alert(this.response);
+                }
+            }
+            // xhttp.open("GET", "reading?_=" + new Date().getTime());
+            xhttp_1.open("GET", "state");
+            xhttp_1.send();
         }
         function myFunction(xml) {
-        const xmlDoc = xml.responseXML;
-        const x = xmlDoc.getElementsByTagName("READING");
-        let table="<tr><th>OLD READING :</th><td>" + x[0].getElementsByTagName("OLD")[0].childNodes[0].nodeValue + "</td></tr>" +
-        "<tr><th>NEW READING :</th><td>" + x[0].getElementsByTagName("NEW")[0].childNodes[0].nodeValue + "</td></tr>" +
-        "<tr><th>CONSUMPTION :</th><td>" + x[0].getElementsByTagName("CONSUMPTION")[0].childNodes[0].nodeValue + "</td></tr>";
-        document.getElementById("demo").innerHTML = table;
-        var tampering = x[0].getElementsByTagName("TAMPERING")[0].childNodes[0].nodeValue;
-        var complaint = x[0].getElementsByTagName("COMPLAINT")[0].childNodes[0].nodeValue;
-        if(tampering != " ") {
-            alert("Connection tampered");
-        }
-        if(complaint != " ") {
-            alert(complaint);
-        }
-
+            const xmlDoc = xml.responseXML;
+            const x = xmlDoc.getElementsByTagName("READING");
+            let table="<tr><th>OLD READING :</th><td>" + x[0].getElementsByTagName("OLD")[0].childNodes[0].nodeValue + "</td></tr>" +
+            "<tr><th>NEW READING :</th><td>" + x[0].getElementsByTagName("NEW")[0].childNodes[0].nodeValue + "</td></tr>" +
+            "<tr><th>CONSUMPTION :</th><td>" + x[0].getElementsByTagName("CONSUMPTION")[0].childNodes[0].nodeValue + "</td></tr>";
+            document.getElementById("demo").innerHTML = table;
         }
         loadDoc();
-        //setInterval(loadDoc, 1000);
+        setInterval(loadDoc, 1000);
     </script>
 </body>
 </html>
